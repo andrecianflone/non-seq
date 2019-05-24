@@ -11,6 +11,9 @@ import data
 import models
 import utils
 
+# CUDA
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
 def evaluate(args, model, corpus, data_source, criterion):
     # Turn on evaluation mode which disables dropout.
     model.eval()
@@ -183,7 +186,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='PyTorch Wikitext-2 RNN/LSTM Language Model')
     parser.add_argument('--data', type=str, default='./data/wikitext-2',
                         help='location of the data corpus')
-    parser.add_argument('--dataset', type=str, default='naive',
+    parser.add_argument('--dataset', type=str, default='wiki-2',
                         help='`naive`, `wiki-2`, `wiki-100`')
     parser.add_argument('--prepared_data', type=str, default='data/naive.pickle',
                         help='path of prepared data')
@@ -235,9 +238,6 @@ if __name__ == '__main__':
     # Set the random seed manually for reproducibility.
     torch.manual_seed(args.seed)
 
-    # CUDA
-    args.cuda =  torch.cuda.is_available()
-    device = torch.device("cuda" if args.cuda else "cpu")
 
     # Saving
     args.save_path = 'saved/' + args.dataset + '_model.pt'

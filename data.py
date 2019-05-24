@@ -4,6 +4,7 @@ import random
 from io import open
 import torch
 import nltk
+import utils
 from nltk import word_tokenize
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -159,7 +160,7 @@ def get_data(args):
                 val_data = d["val_data"]
                 test_data = d["test_data"]
         else:
-            corpus = data.NaivePsychCorpus(args.data, args.test_percent)
+            corpus = NaivePsychCorpus(args.data, args.test_percent)
             train_data = utils.batchify(corpus.train, args.batch_size)
             val_data = utils.batchify(corpus.valid, args.eval_batch_size)
             test_data = utils.batchify(corpus.test, args.eval_batch_size)
@@ -174,14 +175,14 @@ def get_data(args):
                                                             args.prepared_data))
     elif args.dataset=='wiki-2':
         args.data='data/wikitext-2'
-        corpus = Corpus(data)
+        corpus = Corpus(args.data)
         train_data = batchify(corpus.train, args.batch_size)
         val_data = batchify(corpus.valid, args.eval_batch_size)
         test_data = batchify(corpus.test, args.eval_batch_size)
 
     elif args.dataset=='wiki-100':
         args.data='data/wikitext-103'
-        corpus = Corpus(data)
+        corpus = Corpus(args.data)
         train_data = batchify(corpus.train, args.batch_size)
         val_data = batchify(corpus.valid, args.eval_batch_size)
         test_data = batchify(corpus.test, args.eval_batch_size)
